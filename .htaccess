@@ -1,0 +1,10 @@
+AddDefaultCharset utf-8
+php_flag  display_errors On
+php_flag short_open_tag on
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !/phpMyAdmin/
+RewriteCond %{REQUEST_URI} !/collect/
+RewriteCond $1 !^(index\.php|robots\.txt|static|.+\.gif$|.+\.xml$|.+\.jpeg$|.+\.jpg$|.+\.png$|.+\.woff$|.+\.js$|.+\.txt$|google[a-z0-9]+\.html|tmp_image\/_temporary_.+$)
+RewriteCond %{REQUEST_URI} !/manual/
+RewriteRule ^(.*)$ /index.php/$1 [L]
+
