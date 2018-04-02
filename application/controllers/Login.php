@@ -25,7 +25,7 @@ class Login extends CI_Controller {
 			$login['loginfrag']="1";
 			$this->session->set_userdata($login);
 	}	
-	redirect(base_url()."mypage/index");
+	redirect(base_url()."bug/toplist");
 	exit;
 	}
 }
