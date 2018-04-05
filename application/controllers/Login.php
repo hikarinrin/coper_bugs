@@ -12,12 +12,16 @@ class Login extends CI_Controller {
 
 	}
 
+	public function index(){
+		$this->login();
+    }
+
   public function login()
 	{
-		$this->load->view('welcome_message');
+		$this->load->view('login/login');
 	}
 	
-	public function bugs()
+	public function logincheck()
 	{
 	$post = $this->input->post();
 	$this->load->library('session');

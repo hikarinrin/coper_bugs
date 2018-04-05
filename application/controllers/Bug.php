@@ -9,7 +9,7 @@ class Bug extends CI_Controller {
 	$this->load->database();
 	$this->load->library('session');
 	}
-	/*public function bugs(){
+	/*public function logincheck(){
 	$post = $this->input->post();
 	$this->load->library('session');
 	if($post['email']=="hikari.kudo@neo-career.co.jp"){
@@ -151,46 +151,66 @@ class Bug extends CI_Controller {
          }
      }
     //b16重要度一覧ページ
-     public function importance(){
-         
-         $this->load->view('importance_b16');
+     public function importance(){ 
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->importance();
+         $data['importance']=$ret;
+         $this->load->view('importance_b16',$data);
      }
     
-    //b17
-    /*
-     public function (){
-     
-     $this->load->view('');
+    //b17重要度作成ページ
+    public function importanceadd(){
+     $this->load->view('importanceadd_b17');
      }
-     */
-    //b18
-    /*
-     public function (){
      
-     $this->load->view('');
+    //b18重要度完了ページ
+     public function importancedone(){
+         $post=$this->input->post();
+         $data['level']=$post['level'];
+         $this->db->trans_start();
+         $this->db->insert('importance',$data);
+         $this->db->trans_complete();
+         $this->load->view('importancedone_b18',$post);
      }
-     */
-    //b19
-    /*
-     public function (){
-     
-     $this->load->view('');
+    //b19重要度詳細ページ
+     public function importancedetail($importance_id=false){
+         if ($importance_id == false) {
+             redirect(base_url('bug/importance'));
+             eixt;
+         }
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->importancedetail($importance_id);
+         $data['importancedetail']=$ret['importancedetail'];
+         $this->load->view('importancedetail_b19',$data);
      }
-     */
-    //b20
-    /*
-     public function (){
-     
-     $this->load->view('');
+    //b20重要度編集
+     public function importanceedit($importance_id=false){
+         if ($importance_id == false) {
+             redirect(base_url('bug/importance'));
+             eixt;
+         }
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->importanceedit($importance_id);
+         $data['importanceedit']=$ret['importanceedit'];
+         $this->load->view('importanceedit_b20',$data);
      }
-     */
-    //b21
-    /*
-     public function (){
-     
-     $this->load->view('');
-     }
-     */
+    //b21重要度編集完了
+     public function importanceupdate(){
+         $post=$this->input->post();
+         $data['level'] =$post['level'];
+         $importance_id =$post['importance_id'];
+         $this->db->trans_start();
+         $this->db->set($data);
+         $this->db->where('importance_id',$importance_id);
+         $ret=$this->db->update('importance');
+         $this->db->trans_complete();
+         if($ret==true){
+             $this->load->view('importanceupdate_b21');
+         }
+         else{
+             redirect(base_url()."bug/importanceedit/".$importance_id);
+        }
+    }
     //b22ステータス一覧ページ
      public function status(){
      

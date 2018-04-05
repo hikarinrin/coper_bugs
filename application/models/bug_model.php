@@ -24,6 +24,25 @@ class bug_model extends CI_Model{
                                     ->get()->result_array();
         return $ret;
     }
-
+    public function importance(){
+        $ret=$this->db->select('*')
+                ->from('importance')
+                ->get()->result_array();
+        return $ret;
+    }
+    public function importancedetail($importance_id){
+        $ret['importancedetail']=$this->db->select('*')
+                            ->from('importance')
+                            ->where('importance_id',$importance_id)
+                            ->get()->result_array();
+        return $ret;
+    }
+    public function importanceedit($importance_id){
+        $ret['importanceedit']=$this->db->select('*')
+                                    ->from('importance')
+                                    ->where('importance_id',$importance_id)
+                                    ->get()->result_array();
+        return $ret;
+    }
 }
 ?>

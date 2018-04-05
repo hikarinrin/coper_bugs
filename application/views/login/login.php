@@ -1,6 +1,6 @@
 <center>
 <div class="box1">
-<form action="http://coper-bugs.com/login/bugs" method="post">
+<form action="http://coper-bugs.com/login/logincheck" method="post">
 <font size="6px"><strong>Coper Bugs</strong></font><br><br>
 <p>メールアドレス</p>
 <input type="text" name="email" class="text">
@@ -20,15 +20,15 @@
 	height:250px;
 }
 .box1 p {
-    margin: 0; 
+    margin: 0;
     padding: 0;
 	font-size: 2px;
 }
 
 .text{
 	width:400px;
-	height:30px;		
-		
+	height:30px;
+
 }
 
 #submit{
@@ -40,3 +40,4 @@
 }
 
 </style>
+
