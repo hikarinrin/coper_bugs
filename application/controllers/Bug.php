@@ -213,23 +213,25 @@ class Bug extends CI_Controller {
     }
     //b22ステータス一覧ページ
      public function status(){
-     
-         $this->load->view('status_b22');
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->status();
+         $data['status']=$ret;	
+         $this->load->view('status_b22',$data);
      }
-    //b23
-    /*
-     public function (){
-     
-     $this->load->view('');
+    //b23ステータス追加ページ
+    public function statusadd(){
+     $this->load->view('statusadd_b23');
      }
-     */
-    //b24
-    /*
-     public function (){
-     
-     $this->load->view('');
+
+    //b24ステータス完了ページ
+     public function statusdone(){
+         $post=$this->input->post();
+         $data['status']=$post['status'];
+         $this->db->trans_start();
+         $this->db->insert('status',$data);
+         $this->db->trans_complete();
+         $this->load->view('statusdone_b24',$post);
      }
-     */
     //b24
     /*
      public function (){

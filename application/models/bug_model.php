@@ -44,5 +44,13 @@ class bug_model extends CI_Model{
                                     ->get()->result_array();
         return $ret;
     }
+    public function status(){
+        $ret=$this->db->select('*')
+                ->from('status')
+                ->get()->result_array();
+        return $ret;
+    }
+
+    
 }
 ?>
