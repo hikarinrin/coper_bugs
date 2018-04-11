@@ -50,7 +50,20 @@ class bug_model extends CI_Model{
                 ->get()->result_array();
         return $ret;
     }
+    public function statusdetail($status_id){
+        $ret['statusdetail']=$this->db->select('*')
+                            ->from('status')
+                            ->where('status_id',$status_id)
+                            ->get()->result_array();
+        return $ret;
+    }
+    public function statusedit($status_id){
+        $ret['statusedit']=$this->db->select('*')
+                                    ->from('status')
+                                    ->where('status_id',$status_id)
+                                    ->get()->result_array();
+        return $ret;
+    }
 
-    
 }
 ?>

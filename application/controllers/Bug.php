@@ -113,7 +113,7 @@ class Bug extends CI_Controller {
      public function userdetail($user_id=false){
          if ($user_id == false) {
              redirect(base_url('bug/user'));
-             eixt;
+             exit;
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->userdetail($user_id);
@@ -124,7 +124,7 @@ class Bug extends CI_Controller {
      public function useredit($user_id=false){
          if ($user_id == false) {
              redirect(base_url('bug/user'));
-             eixt;
+             exit;
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->useredit($user_id);
@@ -176,7 +176,7 @@ class Bug extends CI_Controller {
      public function importancedetail($importance_id=false){
          if ($importance_id == false) {
              redirect(base_url('bug/importance'));
-             eixt;
+             exit;
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->importancedetail($importance_id);
@@ -187,7 +187,7 @@ class Bug extends CI_Controller {
      public function importanceedit($importance_id=false){
          if ($importance_id == false) {
              redirect(base_url('bug/importance'));
-             eixt;
+             exit;
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->importanceedit($importance_id);
@@ -232,34 +232,46 @@ class Bug extends CI_Controller {
          $this->db->trans_complete();
          $this->load->view('statusdone_b24',$post);
      }
-    //b24
-    /*
-     public function (){
-     
-     $this->load->view('');
+    
+	//b25ステータス詳細ページ
+     public function statusdetail($status_id=false){
+         if ($status_id == false) {
+             redirect(base_url('bug/status'));
+             exit;
+         }
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->statusdetail($status_id);
+         $data['statusdetail']=$ret['statusdetail'];
+         $this->load->view('statusdetail_b25',$data);
      }
-     */
-    //b25
-    /*
-     public function (){
-     
-     $this->load->view('');
+    //b26ステータス編集
+     public function statusedit($status_id=false){
+         if ($status_id == false) {
+             redirect(base_url('bug/status'));
+             exit;
+         }
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->statusedit($status_id);
+         $data['statusedit']=$ret['statusedit'];
+         $this->load->view('statusedit_b26',$data);
      }
-     */
-    //b26
-    /*
-     public function (){
-     
-     $this->load->view('');
-     }
-     */
-    //b27
-    /*
-     public function (){
-     
-     $this->load->view('');
-     }
-     */
+    //b27ステータス編集完了
+     public function statusupdate(){
+         $post=$this->input->post();
+         $data['status'] =$post['status'];
+         $status_id =$post['status_id'];
+         $this->db->trans_start();
+         $this->db->set($data);
+         $this->db->where('status_id',$status_id);
+         $ret=$this->db->update('status');
+         $this->db->trans_complete();
+         if($ret==true){
+             $this->load->view('statusupdate_b27');
+         }
+         else{
+             redirect(base_url()."bug/statusedit/".$status_id);
+        }
+    }
     //b28：チケット種類一覧
      public function ticket(){
      
