@@ -213,8 +213,15 @@ class Bug extends CI_Controller {
     }
     //b22ステータス一覧ページ
      public function status(){
-         $this->load->model('bug_model');
-         $ret=$this->bug_model->status();
+         $pull=2;
+	 $this->load->model('bug_model');
+	 $page = $this->input->get('page');
+	 //var_dump($page);
+	 //exit;
+         $total=$this->bug_model->count_status();
+	 var_dump($total);
+	 exit;
+	 $ret=$this->bug_model->status($page,$pull);
          $data['status']=$ret;	
          $this->load->view('status_b22',$data);
      }
@@ -250,9 +257,16 @@ class Bug extends CI_Controller {
              redirect(base_url('bug/status'));
              exit;
          }
+	
          $this->load->model('bug_model');
          $ret=$this->bug_model->statusedit($status_id);
-         $data['statusedit']=$ret['statusedit'];
+         if($ret==false){
+		redirect(base_url('bug/status'));
+		exit;
+	 }
+	 var_dump($ret);
+	 exit;
+	 $data['statusedit']=$ret['statusedit'];
          $this->load->view('statusedit_b26',$data);
      }
     //b27ステータス編集完了
