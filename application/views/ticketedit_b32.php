@@ -1,4 +1,4 @@
-ユーザー編集ページb14<br/>
+チケット編集ページb32<br/>
 <hr/>
 ユーザー編集
 <?php echo form_open_multipart('http://coper-bugs.com/bug/ticketupdate');?>

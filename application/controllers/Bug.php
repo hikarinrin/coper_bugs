@@ -110,6 +110,10 @@ class Bug extends CI_Controller {
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->detail($bug_id);
+         if($ret['detail']==false){
+             redirect(base_url('bug/toplist'));
+             exit;
+         }
          $data['detail']=$ret['detail'];
          $data['ticket']=$ret['ticket'];
          $data['ticketlist']=$ret['ticketlist'];
@@ -131,6 +135,10 @@ class Bug extends CI_Controller {
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->edit($bug_id);
+         if($ret['info']==false){
+             redirect(base_url('bug/toplist'));
+             exit;
+         }
          $data['info'] =$ret['info'] ;
          $data['ticket']=$ret['ticket'];
          $data['ticketlist']=$ret['ticketlist'];
@@ -250,6 +258,10 @@ class Bug extends CI_Controller {
          $this->load->model('bug_model');
          $ret=$this->bug_model->userdetail($user_id);
          $data['userdetail']=$ret['userdetail'];
+         if($ret==false){
+             redirect(base_url('bug/user'));
+             exit;
+         }
          $this->load->view('userdetail_b13',$data);
      }
     //b14ユーザー編集
@@ -260,6 +272,10 @@ class Bug extends CI_Controller {
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->useredit($user_id);
+         if($ret==false){
+             redirect(base_url('bug/user'));
+             exit;
+         }
          $data['useredit']=$ret['useredit'];
          $this->load->view('useredit_b14',$data);
      }
@@ -312,6 +328,10 @@ class Bug extends CI_Controller {
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->importancedetail($importance_id);
+         if($ret==false){
+             redirect(base_url('bug/importance'));
+             exit;
+         }
          $data['importancedetail']=$ret['importancedetail'];
          $this->load->view('importancedetail_b19',$data);
      }
@@ -323,6 +343,10 @@ class Bug extends CI_Controller {
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->importanceedit($importance_id);
+         if($ret==false){
+             redirect(base_url('bug/importance'));
+             exit;
+         }
          $data['importanceedit']=$ret['importanceedit'];
          $this->load->view('importanceedit_b20',$data);
      }
@@ -345,14 +369,16 @@ class Bug extends CI_Controller {
     }
     //b22ステータス一覧ページ
      public function status(){
-         $pull=2;
+         //$pull=2;
+         $pull=10;
          $this->load->model('bug_model');
          $page = $this->input->get('page');
-         //var_dump($page);
-         //exit;
+         //前回つまづいた
+         /*var_dump($page);
+         exit;*/
          $total=$this->bug_model->count_status();
-         //var_dump($total);
-         //exit;
+         /*var_dump($total);
+         exit;*/
          $ret=$this->bug_model->status($page,$pull);
          $data['status']=$ret;
          $this->load->view('status_b22',$data);
@@ -374,13 +400,21 @@ class Bug extends CI_Controller {
     
 	//b25ステータス詳細ページ
      public function statusdetail($status_id=false){
+         //function 関数名(引数=デフォルト値)。status_b22でforeachされているリンクには$status_idが指定されているためデフォルト値は取らない。
          if ($status_id == false) {
              redirect(base_url('bug/status'));
              exit;
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->statusdetail($status_id);
+         if($ret==false){
+             redirect(base_url('bug/status'));
+             exit;
+         }
          $data['statusdetail']=$ret['statusdetail'];
+         /*print "<pre>";
+         var_dump($ret);
+         exit;*/
          $this->load->view('statusdetail_b25',$data);
      }
     //b26ステータス編集
@@ -389,16 +423,15 @@ class Bug extends CI_Controller {
              redirect(base_url('bug/status'));
              exit;
          }
-	
          $this->load->model('bug_model');
          $ret=$this->bug_model->statusedit($status_id);
          if($ret==false){
-		redirect(base_url('bug/status'));
-		exit;
-	 }
-	 var_dump($ret);
-	 exit;
-	 $data['statusedit']=$ret['statusedit'];
+             redirect(base_url('bug/status'));
+             exit;
+         }
+         /*var_dump($ret);
+         exit;*/
+         $data['statusedit']=$ret['statusedit'];
          $this->load->view('statusedit_b26',$data);
      }
     //b27ステータス編集完了
@@ -449,6 +482,10 @@ class Bug extends CI_Controller {
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->ticketdetail($ticket_id);
+         if($ret==false){
+             redirect(base_url('bug/ticket'));
+             exit;
+         }
          $data['ticketdetail']=$ret['ticketdetail'];
          $this->load->view('ticketdetail_b31',$data);
      }
@@ -461,6 +498,10 @@ class Bug extends CI_Controller {
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->ticketedit($ticket_id);
+         if($ret==false){
+             redirect(base_url('bug/ticket'));
+             exit;
+         }
          $data['ticketedit']=$ret['ticketedit'];
          $this->load->view('ticketedit_b32',$data);
      }

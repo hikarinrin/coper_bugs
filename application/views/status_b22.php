@@ -6,4 +6,8 @@
 <?php echo $val['status']."(ステータス詳細へb25)";?><br/>
 </a>
 <?php } ?>
-
+<?php
+    print "<pre>";
+    var_dump($status);
+    exit;
+    
