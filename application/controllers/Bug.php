@@ -1,13 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Bug extends CI_Controller {
     public function __construct(){
-    parent::__construct();
-	$this->load->helper('url');
-	$this->load->helper('form');
-	$this->load->database();
-	$this->load->library('session');
+        parent::__construct();
+        $this->load->helper('url');
+        $this->load->helper('form');
+        $this->load->database();
+        $this->load->library('session');
 	}
 	/*public function logincheck(){
 	$post = $this->input->post();
@@ -23,58 +22,192 @@ class Bug extends CI_Controller {
     //b1：バグ一覧ページ
     public function toplist(){
 		$ret = $this->session->userdata('loginfrag');
-		if($ret=="1"){
-            $this->load->view('toplist_b1');
+        if($ret=="1"){
+            $this->load->model('bug_model');
+            $ret=$this->bug_model->toplist();
+            $data['buglist'] = $ret;
+            /*$data['buglist'] = $ret['detail'];
+            $data['ticket']=$ret['ticket'];
+            $data['ticketlist']=$ret['ticketlist'];
+            $data['importance']=$ret['importance'];
+            $data['importancelist']=$ret['importancelist'];
+            $data['status']=$ret['status'];
+            $data['statuslist']=$ret['statuslist'];*/
+            $this->load->view('toplist_b1',$data);
         //echo "ログインしています";
-		}
-		else{
-		redirect(base_url()."login/login");
+        }else if($ret==2){
+            $this->load->model('bug_model');
+            $ret=$this->bug_model->toplist();
+            $data['buglist'] = $ret;
+            /*$data['buglist'] = $ret['detail'];
+            $data['ticket']=$ret['ticket'];
+            $data['ticketlist']=$ret['ticketlist'];
+            $data['importance']=$ret['importance'];
+            $data['importancelist']=$ret['importancelist'];
+            $data['status']=$ret['status'];
+            $data['statuslist']=$ret['statuslist'];*/
+            $this->load->view('toplist_b1',$data);
+            }else{
+            redirect(base_url()."login/login");
 		exit;
 		}
-	}
-    //b2
-    /*
-     public function (){
-     
-     $this->load->view('');
+    }
+    //b2：バグ作成
+     public function add(){
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->add();
+         $data['ticket']=$ret['ticket'];
+         $data['device']=$ret['device'];
+         $data['importance']=$ret['importance'];
+         $data['status']=$ret['status'];
+         $this->load->view('add_b2',$data);
      }
-    */
-    //b3
+    //b3：バグ作成完了
+     public function done(){
+         $post=$this->input->post();
+         $data['title']=$post['title'];
+         $data['URL']=$post['URL'];
+         $data['CACOO']=$post['CACOO'];
+         $data['content']=$post['content'];
+         $this->db->trans_start();
+         $this->db->insert('bug',$data);
+         $new_bug_id=$this->db->insert_id();
+         foreach($post['ticket'] as $key2 => $val2){
+             $data2['ticket_id']=$val2;
+             $data2['bug_id']=$new_bug_id;
+             $this->db->insert('bug_ticket_relation',$data2);
+         }
+         foreach($post['device'] as $key3 => $val3){
+             $data3['device_id']=$val3;
+             $data3['bug_id']=$new_bug_id;
+             $this->db->insert('bug_device_relation',$data3);
+         }
+         foreach($post['importance'] as $key4 => $val4){
+             $data4['importance_id']=$val4;
+             $data4['bug_id']=$new_bug_id;
+             $this->db->insert('bug_importance_relation',$data4);
+         }
+         foreach($post['status'] as $key5 => $val5){
+             $data5['status_id']=$val5;
+             $data5['bug_id']=$new_bug_id;
+             $this->db->insert('bug_status_relation',$data5);
+         }
+         $this->db->trans_complete();
+         $path = APPPATH . '../images';
+         $config['upload_path']= $path;
+         $config['allowed_types']='gif|jpg|png';
+         $config['file_name'] = $new_bug_id . '.jpg';
+         $this->load->library('upload', $config);
+         $this->upload->do_upload('photo');
+         $error = $this->upload->display_errors();
+         $this->load->view('done_b3',$post);
+     }
+    //b4バグ詳細
+     public function detail($bug_id=false){
+         if ($bug_id == false) {
+             redirect(base_url('bug/toplist'));
+             eixt;
+         }
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->detail($bug_id);
+         $data['detail']=$ret['detail'];
+         $data['ticket']=$ret['ticket'];
+         $data['ticketlist']=$ret['ticketlist'];
+         $data['device']=$ret['device'];
+         $data['devicelist']=$ret['devicelist'];
+         $data['importance']=$ret['importance'];
+         $data['importancelist']=$ret['importancelist'];
+         $data['status']=$ret['status'];
+         $data['statuslist']=$ret['statuslist'];
+         $data['image_path'] = base_url().'images/'.$bug_id.'.jpg';
+         $this->load->view('detail_b4',$data);
+     }
+
+    //b5バグ編集
+     public function edit($bug_id = false){
+         if ($bug_id == false){
+             redirect(base_url('bug/toplist'));
+             eixt;
+         }
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->edit($bug_id);
+         $data['info'] =$ret['info'] ;
+         $data['ticket']=$ret['ticket'];
+         $data['ticketlist']=$ret['ticketlist'];
+         $data['device']=$ret['device'];
+         $data['devicelist']=$ret['devicelist'];
+         $data['importance']=$ret['importance'];
+         $data['importancelist']=$ret['importancelist'];
+         $data['status']=$ret['status'];
+         $data['statuslist']=$ret['statuslist'];
+         $this->load->view('edit_b5',$data);
+     }
+    
+    //b6バグ編集完了
+     public function update(){
+         $post=$this->input->post();
+         $data['title']=$post['title'];
+         $data['URL']=$post['URL'];
+         $data['CACOO']=$post['CACOO'];
+         $data['content']=$post['content'];
+         $bug_id =$post['bug_id'];
+         $this->db->trans_start();
+         $this->db->where('bug_id',$bug_id);
+         $this->db->delete('bug_ticket_relation');
+         $this->db->set($data);
+         $this->db->where('bug_id', $bug_id);
+         $ret = $this->db->update('bug');
+         foreach($post['ticket'] as $key =>$val){
+             $data2['ticket_id']=$val;
+             $data2['bug_id']=$bug_id;
+             $this->db->insert('bug_ticket_relation',$data2);
+         }
+         $this->db->where('bug_id',$bug_id);
+         $this->db->delete('bug_device_relation');
+         $this->db->set($data);
+         $this->db->where('bug_id', $bug_id);
+         $ret = $this->db->update('bug');
+         foreach($post['device'] as $key2 =>$val2){
+             $data3['device_id']=$val2;
+             $data3['bug_id']=$bug_id;
+             $this->db->insert('bug_device_relation',$data3);
+         }
+         $this->db->where('bug_id',$bug_id);
+         $this->db->delete('bug_importance_relation');
+         $this->db->set($data);
+         $this->db->where('bug_id', $bug_id);
+         $ret = $this->db->update('bug');
+         foreach($post['importance'] as $key3 =>$val3){
+             $data4['importance_id']=$val3;
+             $data4['bug_id']=$bug_id;
+             $this->db->insert('bug_importance_relation',$data4);
+         }
+         $this->db->where('bug_id',$bug_id);
+         $this->db->delete('bug_status_relation');
+         $this->db->set($data);
+         $this->db->where('bug_id', $bug_id);
+         $ret = $this->db->update('bug');
+         foreach($post['status'] as $key4 =>$val4){
+             $data5['status_id']=$val4;
+             $data5['bug_id']=$bug_id;
+             $this->db->insert('bug_status_relation',$data5);
+         }
+         $this->db->trans_complete();
+         if($ret==true){
+             $this->load->view('update_b6');
+         }else{
+             redirect(base_url()."bug/edit/".$bug_id);
+         }
+     }
+    
+    //b7編集履歴詳細
     /*
      public function (){
      
      $this->load->view('');
      }
      */
-    //b4
-    /*
-     public function (){
-     
-     $this->load->view('');
-     }
-     */
-    //b5
-    /*
-     public function (){
-     
-     $this->load->view('');
-     }
-     */
-    //b6
-    /*
-     public function (){
-     
-     $this->load->view('');
-     }
-     */
-    //b7
-    /*
-     public function (){
-     
-     $this->load->view('');
-     }
-     */
-    //b8
+    //b8編集履歴内容
     /*
      public function (){
      
@@ -83,7 +216,6 @@ class Bug extends CI_Controller {
      */
     //b9：マスタ設定
     public function master(){
-        
         $this->load->view('master_b9');
     }
     //b10ユーザー一覧ページ
@@ -214,15 +346,15 @@ class Bug extends CI_Controller {
     //b22ステータス一覧ページ
      public function status(){
          $pull=2;
-	 $this->load->model('bug_model');
-	 $page = $this->input->get('page');
-	 //var_dump($page);
-	 //exit;
+         $this->load->model('bug_model');
+         $page = $this->input->get('page');
+         //var_dump($page);
+         //exit;
          $total=$this->bug_model->count_status();
-	 var_dump($total);
-	 exit;
-	 $ret=$this->bug_model->status($page,$pull);
-         $data['status']=$ret;	
+         //var_dump($total);
+         //exit;
+         $ret=$this->bug_model->status($page,$pull);
+         $data['status']=$ret;
          $this->load->view('status_b22',$data);
      }
     //b23ステータス追加ページ
@@ -288,44 +420,92 @@ class Bug extends CI_Controller {
     }
     //b28：チケット種類一覧
      public function ticket(){
-     
-         $this->load->view('ticket_b28');
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->ticket();
+         $data['ticket']=$ret;
+         $this->load->view('ticket_b28',$data);
      }
-    //b29
-    /*
-     public function (){
-     
-     $this->load->view('');
+
+    //b29：チケット種類作成ページ
+     public function ticketadd(){
+         $this->load->view('ticketadd_b29');
      }
-     */
-    //b30
-    /*
-     public function (){
-     
-     $this->load->view('');
+
+    //b30：チケット完了ページ
+     public function ticketdone(){
+         $post=$this->input->post();
+         $data['type']=$post['type'];
+         $this->db->trans_start();
+         $this->db->insert('ticket',$data);
+         $this->db->trans_complete();
+         $this->load->view('ticketdone_b30',$post);
      }
-     */
-    //b31
-    /*
-     public function (){
-     
-     $this->load->view('');
+
+    //b31：チケット詳細ページ
+     public function ticketdetail($ticket_id=false){
+         if ($ticket_id == false) {
+             redirect(base_url('bug/ticket'));
+             exit;
+         }
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->ticketdetail($ticket_id);
+         $data['ticketdetail']=$ret['ticketdetail'];
+         $this->load->view('ticketdetail_b31',$data);
      }
-     */
-    //b32
-    /*
-     public function (){
-     
-     $this->load->view('');
+
+    //b32：チケット編集
+     public function ticketedit($ticket_id=false){
+         if ($ticket_id == false) {
+             redirect(base_url('bug/ticket'));
+             exit;
+         }
+         $this->load->model('bug_model');
+         $ret=$this->bug_model->ticketedit($ticket_id);
+         $data['ticketedit']=$ret['ticketedit'];
+         $this->load->view('ticketedit_b32',$data);
      }
-     */
-    //b33
-    /*
-     public function (){
-     
-     $this->load->view('');
+
+    //b33：チケット編集完了
+     public function ticketupdate(){
+         $post=$this->input->post();
+         $data['type'] =$post['type'];
+         $ticket_id =$post['ticket_id'];
+         $this->db->trans_start();
+         $this->db->set($data);
+         $this->db->where('ticket_id',$ticket_id);
+         $ret=$this->db->update('ticket');
+         $this->db->trans_complete();
+         if($ret==true){
+             $this->load->view('ticketupdate_b33');
+         }
+         else{
+             redirect(base_url()."bug/ticketedit/".$ticket_id);
+         }
      }
-     */
+    //臨時：デバイス作成
+    public function device(){
+        $this->load->model('bug_model');
+        $ret=$this->bug_model->device();
+        $data['device']=$ret;
+        $this->load->view('device',$data);
+    }
+    
+    //臨時：device種類作成ページ
+    public function deviceadd(){
+        $this->load->view('deviceadd');
+    }
+    
+    //臨時：device完了ページ
+    public function devicedone(){
+        $post=$this->input->post();
+        $data['hard']=$post['hard'];
+        $this->db->trans_start();
+        $this->db->insert('device',$data);
+        $this->db->trans_complete();
+        $this->load->view('devicedone',$post);
+    }
+    
+    
 }
 ?>
 
