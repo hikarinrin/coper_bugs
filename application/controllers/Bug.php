@@ -7,6 +7,8 @@ class Bug extends CI_Controller {
         $this->load->helper('form');
         $this->load->database();
         $this->load->library('session');
+        $this->load->library('pagination');
+        $this->load->library('table');
 	}
 	/*public function logincheck(){
 	$post = $this->input->post();
@@ -21,7 +23,17 @@ class Bug extends CI_Controller {
     
     //b1：バグ一覧ページ
     public function toplist(){
-		$ret = $this->session->userdata('loginfrag');
+        $config["base_url"] = "http://coper-bugs.com/bug/toplist";
+        $ret = $this->session->userdata('loginfrag');
+        $config["total_rows"] = $this->db->get("bug")->num_rows();
+        $config["per_page"] = 5;
+        $config["num_links"] = 3;
+        $this->pagination->initialize($config);
+        $data["records"] = $this->db->get("bug", $config["per_page"], $this->uri->segment(3));
+
+        $this->load->view("toplist_b1", $data);
+    }
+		/*$ret = $this->session->userdata('loginfrag');
         if($ret=="1"){
             $this->load->model('bug_model');
             $ret=$this->bug_model->toplist();
@@ -32,7 +44,7 @@ class Bug extends CI_Controller {
             $data['importance']=$ret['importance'];
             $data['importancelist']=$ret['importancelist'];
             $data['status']=$ret['status'];
-            $data['statuslist']=$ret['statuslist'];*/
+            $data['statuslist']=$ret['statuslist'];
             $this->load->view('toplist_b1',$data);
         //echo "ログインしています";
         }else if($ret==2){
@@ -45,13 +57,13 @@ class Bug extends CI_Controller {
             $data['importance']=$ret['importance'];
             $data['importancelist']=$ret['importancelist'];
             $data['status']=$ret['status'];
-            $data['statuslist']=$ret['statuslist'];*/
+            $data['statuslist']=$ret['statuslist'];
             $this->load->view('toplist_b1',$data);
             }else{
             redirect(base_url()."login/login");
 		exit;
 		}
-    }
+    }*/
     //b2：バグ作成
      public function add(){
          $this->load->model('bug_model');
