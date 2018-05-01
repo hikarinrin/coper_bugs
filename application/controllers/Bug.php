@@ -23,7 +23,7 @@ class Bug extends CI_Controller {
     
     //b1：バグ一覧ページ
     public function toplist(){
-        $config["base_url"] = "http://coper-bugs.com/bug/toplist";
+        $config["base_url"] = base_url("/bug/toplist");
         $ret = $this->session->userdata('loginfrag');
         $config["total_rows"] = $this->db->get("bug")->num_rows();
         $config["per_page"] = 5;
@@ -76,6 +76,10 @@ class Bug extends CI_Controller {
      }
     //b3：バグ作成完了
      public function done(){
+        if ($bug_id == false) {
+             redirect(base_url('bug/toplist'));
+             exit;
+         }
          $post=$this->input->post();
          $data['title']=$post['title'];
          $data['URL']=$post['URL'];
@@ -104,7 +108,14 @@ class Bug extends CI_Controller {
              $data5['bug_id']=$new_bug_id;
              $this->db->insert('bug_status_relation',$data5);
          }
-         $this->db->trans_complete();
+         $result = $this->db->trans_complete();
+
+         if ($result == TRUE) {
+             $this->load->view('done_b3');
+         } else{
+            redirect(base_url('bug/toplist'));
+            exit;
+         }
          $path = APPPATH . '../images';
          $config['upload_path']= $path;
          $config['allowed_types']='gif|jpg|png';
@@ -118,7 +129,7 @@ class Bug extends CI_Controller {
      public function detail($bug_id=false){
          if ($bug_id == false) {
              redirect(base_url('bug/toplist'));
-             eixt;
+             exit;
          }
          $this->load->model('bug_model');
          $ret=$this->bug_model->detail($bug_id);
@@ -165,6 +176,10 @@ class Bug extends CI_Controller {
     
     //b6バグ編集完了
      public function update(){
+        if ($bug_id == false){
+             redirect(base_url('bug/toplist'));
+             eixt;
+         }
          $post=$this->input->post();
          $data['title']=$post['title'];
          $data['URL']=$post['URL'];
@@ -212,8 +227,8 @@ class Bug extends CI_Controller {
              $data5['bug_id']=$bug_id;
              $this->db->insert('bug_status_relation',$data5);
          }
-         $this->db->trans_complete();
-         if($ret==true){
+         $update = $this->db->trans_complete();
+         if($update==true){
              $this->load->view('update_b6');
          }else{
              redirect(base_url()."bug/edit/".$bug_id);
@@ -302,8 +317,8 @@ class Bug extends CI_Controller {
          $this->db->set($data);
          $this->db->where('user_id',$user_id);
          $ret=$this->db->update('user');
-         $this->db->trans_complete();
-         if($ret==true){
+         $userupdate=$this->db->trans_complete();
+         if($userupdate==true){
              $this->load->view('userupdate_b15');
          }
          else{
