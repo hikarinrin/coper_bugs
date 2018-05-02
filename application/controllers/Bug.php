@@ -26,8 +26,8 @@ class Bug extends CI_Controller {
         $config["base_url"] = base_url("/bug/toplist");
         $ret = $this->session->userdata('loginfrag');
         $config["total_rows"] = $this->db->get("bug")->num_rows();
-        $config["per_page"] = 5;
-        $config["num_links"] = 3;
+        $config["per_page"] = 10;
+        $config["num_links"] = 5;
         $this->pagination->initialize($config);
         $data["records"] = $this->db->get("bug", $config["per_page"], $this->uri->segment(3));
 
