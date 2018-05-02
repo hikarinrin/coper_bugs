@@ -5,8 +5,8 @@
 </head>
 <body>
 <div style="padding: 10px; margin-left:100px; margin-right:100px;  border: 1px solid #333333; background-color:#E6E6E6;"><h3>バグ一覧</h3>    
-<p><input type="button" onclick="location.href='http://coper-bugs.com/bug/add'" value="チケット作成" ></p>
-<p><input type="button" onclick="location.href='http://coper-bugs.com/bug/master'" value="マスタ設定" ></p>
+<input type="button" onclick="location.href='http://coper-bugs.com/bug/add'" value="チケット作成" >
+<input type="button" onclick="location.href='http://coper-bugs.com/bug/master'" value="マスタ設定" >
 
 <table>
 <tr>
