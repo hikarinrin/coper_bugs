@@ -1,5 +1,4 @@
 <p>登録完了！→<a href="http://coper-bugs.com/bug/toplist">リストへ</a></p>
-</div>
 <!--<p>チケット種類：<?php echo $ticket['type'];?></p>-->
 <p>タイトル：<?php echo $title;?></p>
 <!--<p>デバイス：<?php echo $device['hard'];?></p>-->

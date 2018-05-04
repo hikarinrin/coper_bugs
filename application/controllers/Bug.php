@@ -16,23 +16,34 @@ class Bug extends CI_Controller {
 	if($post['email']=="hikari.kudo@neo-career.co.jp"){
 			$login['loginfrag']="1";
 			$this->session->set_userdata($login);
-	}	
+	}
 	redirect(base_url()."mypage/index");
 	exit;
 	}*/
-    
-    //b1：バグ一覧ページ
-    public function toplist(){
-        $config["base_url"] = base_url("/bug/toplist");
-        $ret = $this->session->userdata('loginfrag');
-        $config["total_rows"] = $this->db->get("bug")->num_rows();
-        $config["per_page"] = 10;
-        $config["num_links"] = 5;
-        $this->pagination->initialize($config);
-        $data["records"] = $this->db->get("bug", $config["per_page"], $this->uri->segment(3));
 
-        $this->load->view("toplist_b1", $data);
-    }
+  //b1：バグ一覧ページ
+  public function toplist($page = 1){
+      if ($page > 1) {
+        $start = ($page * 10) -10;
+  } else {
+        $start = 0;
+  }
+
+  $this->db->select('bug.title, ticket.type, status.status, bug.update_date');
+  $this->db->from('bug');
+  $this->db->join('bug_ticket_relation', 'bug.bug_id = bug_ticket_relation.bug_id');
+  $this->db->join('ticket', 'bug_ticket_relation.ticket_id = ticket.ticket_id');
+  $this->db->join('bug_status_relation', 'bug.bug_id = bug_status_relation.bug_id');
+  $this->db->join('status', 'bug_status_relation.status_id = status.status_id');
+  $this->db->limit(10, $start);
+  $query = $this->db->get();
+  $data['bugs'] = $query->result_array();
+
+  $page_num = $this->db->get("bug")->num_rows();
+  $data['pagination'] = ceil($page_num / 10);
+
+  $this->load->view('toplist_b1',$data);
+  }
 		/*$ret = $this->session->userdata('loginfrag');
         if($ret=="1"){
             $this->load->model('bug_model');
@@ -173,7 +184,7 @@ class Bug extends CI_Controller {
          $data['statuslist']=$ret['statuslist'];
          $this->load->view('edit_b5',$data);
      }
-    
+
     //b6バグ編集完了
      public function update(){
         if ($bug_id == false){
@@ -234,18 +245,18 @@ class Bug extends CI_Controller {
              redirect(base_url()."bug/edit/".$bug_id);
          }
      }
-    
+
     //b7編集履歴詳細
     /*
      public function (){
-     
+
      $this->load->view('');
      }
      */
     //b8編集履歴内容
     /*
      public function (){
-     
+
      $this->load->view('');
      }
      */
@@ -260,7 +271,7 @@ class Bug extends CI_Controller {
          $data['user']=$ret;
          $this->load->view('user_b10',$data);
      }
-    
+
     //b11ユーザー作成ページ
      public function useradd(){
      $this->load->view('useradd_b11');
@@ -326,18 +337,18 @@ class Bug extends CI_Controller {
          }
      }
     //b16重要度一覧ページ
-     public function importance(){ 
+     public function importance(){
          $this->load->model('bug_model');
          $ret=$this->bug_model->importance();
          $data['importance']=$ret;
          $this->load->view('importance_b16',$data);
      }
-    
+
     //b17重要度作成ページ
     public function importanceadd(){
      $this->load->view('importanceadd_b17');
      }
-     
+
     //b18重要度完了ページ
      public function importancedone(){
          $post=$this->input->post();
@@ -424,7 +435,7 @@ class Bug extends CI_Controller {
          $this->db->trans_complete();
          $this->load->view('statusdone_b24',$post);
      }
-    
+
 	//b25ステータス詳細ページ
      public function statusdetail($status_id=false){
          //function 関数名(引数=デフォルト値)。status_b22でforeachされているリンクには$status_idが指定されているためデフォルト値は取らない。
@@ -557,12 +568,12 @@ class Bug extends CI_Controller {
         $data['device']=$ret;
         $this->load->view('device',$data);
     }
-    
+
     //臨時：device種類作成ページ
     public function deviceadd(){
         $this->load->view('deviceadd');
     }
-    
+
     //臨時：device完了ページ
     public function devicedone(){
         $post=$this->input->post();
@@ -572,10 +583,6 @@ class Bug extends CI_Controller {
         $this->db->trans_complete();
         $this->load->view('devicedone',$post);
     }
-    
-    
+
+
 }
-?>
-
-
-
