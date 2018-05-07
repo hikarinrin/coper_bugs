@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Login extends CI_Controller {
-	
+
 	public function __construct(){
         parent::__construct();
         $this->load->helper('url');
@@ -17,7 +17,7 @@ class Login extends CI_Controller {
     public function login(){
 		$this->load->view('login/login');
 	}
-	
+
 	public function logincheck(){
         $post = $this->input->post();
         $this->load->library('session');
@@ -33,4 +33,3 @@ class Login extends CI_Controller {
         exit;
     }
 }
-?>
