@@ -1,7 +1,7 @@
 <center>
 <div class="box1">
 <form action="http://coper-bugs.com/login/logincheck" method="post">
-<font size="6px"><strong>Coper Bugs</strong></font><br><br>
+<font size="6px"><strong>Bugs check</strong></font><br><br>
 <p>メールアドレス</p>
 <input type="text" name="email" class="text">
 <br><br>

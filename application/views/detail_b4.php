@@ -36,7 +36,6 @@
     }
 }?>
 <br/>
-<img src="<?php echo $image_path;?>" width="100px"><br>
 対象ページ(URL)<br/>
 <?php echo $detail[0]["URL"];?><br>
 CACOOページ<br/>

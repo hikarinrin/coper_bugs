@@ -5,7 +5,7 @@
 チケット編集(必須)
 <?php
     foreach($ticket as $key =>$val){?>
-<input type="checkbox"
+<input type="radio"
 <?php
     foreach($ticketlist as $key2 =>$val2){
         if($val2['ticket_id'] == $val['ticket_id']){
@@ -21,7 +21,7 @@
 デバイス<br/>
 <?php
     foreach($device as $devkey =>$devval){?>
-<input type="checkbox"
+<input type="radio"
 <?php
     foreach($devicelist as $devkey2 =>$devval2){
         if($devval2['device_id'] == $devval['device_id']){
@@ -36,7 +36,7 @@
 重要度(必須)<br/>
 <?php
     foreach($importance as $impkey =>$impval){?>
-<input type="checkbox"
+<input type="radio"
 <?php
     foreach($importancelist as $impkey2 =>$impval2){
         if($impval2['importance_id'] == $impval['importance_id']){
@@ -50,7 +50,7 @@
 ステータス(必須)<br/>
 <?php
     foreach($status as $stakey =>$staval){?>
-<input type="checkbox"
+<input type="radio"
 <?php
     foreach($statuslist as $stakey2 =>$staval2){
         if($staval2['status_id'] == $staval['status_id']){

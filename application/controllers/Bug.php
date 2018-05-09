@@ -29,7 +29,7 @@ class Bug extends CI_Controller {
         $start = 0;
   }
 
-  $this->db->select('bug.title, ticket.type, status.status, bug.update_date');
+  $this->db->select('bug.title, ticket.type, status.status, bug.update_date,bug.bug_id');
   $this->db->from('bug');
   $this->db->join('bug_ticket_relation', 'bug.bug_id = bug_ticket_relation.bug_id');
   $this->db->join('ticket', 'bug_ticket_relation.ticket_id = ticket.ticket_id');
@@ -87,10 +87,10 @@ class Bug extends CI_Controller {
      }
     //b3：バグ作成完了
      public function done(){
-        if ($bug_id == false) {
+        /*if ($bug_id == false) {
              redirect(base_url('bug/toplist'));
              exit;
-         }
+         }*/
          $post=$this->input->post();
          $data['title']=$post['title'];
          $data['URL']=$post['URL'];
@@ -122,19 +122,19 @@ class Bug extends CI_Controller {
          $result = $this->db->trans_complete();
 
          if ($result == TRUE) {
-             $this->load->view('done_b3');
+             $this->load->view('done_b3',$data);
          } else{
             redirect(base_url('bug/toplist'));
             exit;
          }
-         $path = APPPATH . '../images';
+         /*$path = APPPATH . '../images';
          $config['upload_path']= $path;
          $config['allowed_types']='gif|jpg|png';
          $config['file_name'] = $new_bug_id . '.jpg';
          $this->load->library('upload', $config);
          $this->upload->do_upload('photo');
          $error = $this->upload->display_errors();
-         $this->load->view('done_b3',$post);
+         $this->load->view('done_b3',$post);*/
      }
     //b4バグ詳細
      public function detail($bug_id=false){
@@ -187,10 +187,6 @@ class Bug extends CI_Controller {
 
     //b6バグ編集完了
      public function update(){
-        if ($bug_id == false){
-             redirect(base_url('bug/toplist'));
-             eixt;
-         }
          $post=$this->input->post();
          $data['title']=$post['title'];
          $data['URL']=$post['URL'];
