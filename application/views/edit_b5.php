@@ -1,3 +1,4 @@
+<?php include ('side.html'); ?>
 <?php echo form_open_multipart('http://coper-bugs.com/bug/update');?>
 <input type="hidden" name="bug_id" value="<?php echo $info[0]["bug_id"]; ?>">
 チケット編集<br/>

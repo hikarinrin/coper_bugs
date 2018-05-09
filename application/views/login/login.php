@@ -15,7 +15,7 @@
     padding: 4em 4em;
     margin: 5em 0;
     color: #2c2c2f;
-    background: #A9D8EF;
+    background: #C8E9F4;
 	width:500px;
 	height:250px;
 }

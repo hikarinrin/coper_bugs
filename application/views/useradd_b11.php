@@ -1,10 +1,10 @@
+<?php include ('side.html'); ?>
 <!DOCTYPE html>
 <html>
 <head>
 <title>ユーザー作成</title>
 </head>
-<body>
-<div style="padding: 10px; margin-left:100px; margin-right:100px;  border: 1px solid #333333; background-color:#E6E6E6;"><h3>ユーザー作成</h3>
+<body><h2>ユーザー作成</h2>
 <hr/>
 <?php echo form_open_multipart('http://coper-bugs.com/bug/userdone');?>
 名前(必須)<br/>

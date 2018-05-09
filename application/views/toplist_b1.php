@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,10 +25,11 @@
         <!-- contents -->
         <div class="contents">
             <h2>バグ一覧</h2>
-
-<table>
-<tr>
-<th>タイトル</th>
+<hr>
+<br>
+<table style="table-layout:fixed;">
+<tr class="table">
+<th width="50">タイトル</th>
 <th>チケット種類</th>
 <th>ステータス</th>
 <th>最終更新履歴</th>
@@ -78,6 +80,7 @@ body {
 .container {
   width: 500px;
   padding:  0 0 0 250px; /* サイドバーとの距離 */
+
 }
  
 .side_bar {
@@ -92,7 +95,7 @@ body {
  
 .contents {
   width: 1000px;
-  padding: 10px;
+  padding: 50px;
 
 }
  
@@ -108,5 +111,13 @@ table {
 td {
     border: solid 1px;
     padding: 0.5em;
+    width:20%;
+    border: 1px solid #CCCCCC;
+    padding: 5px 10px;
+    text-align: left;
 }
+
+
+
+
 </style>

@@ -1,4 +1,5 @@
-ユーザー編集ページb14<br/>
+<?php include ('side.html'); ?>
+<h2>ユーザー編集</h2><br/>
 <hr/>
 ユーザー編集
 <?php echo form_open_multipart('http://coper-bugs.com/bug/userupdate');?>
@@ -9,5 +10,5 @@
 <input type="text" name="mail" value="<?php echo $useredit[0]["mail"];?>"><br/>
 パスワード(必須)<br/>
 <input type="text" name="pass" value="<?php echo $useredit[0]["pass"];?>"><br/>
-<input type="submit" value="登録(ユーザー編集完了ページb15へ)">
+<input type="submit" value="登録">
 </form>

@@ -1,3 +1,4 @@
+<?php include ('side.html'); ?>
 チケット種類<br/>
 <?php foreach($ticket as $key=>$val) {
     foreach($ticketlist as $key2 => $val2){

@@ -40,8 +40,9 @@ class Bug extends CI_Controller {
   $data['bugs'] = $query->result_array();
 
   $page_num = $this->db->get("bug")->num_rows();
-  $data['pagination'] = ceil($page_num / 10);
-
+ 
+    $data['pagination'] = ceil($page_num / 10);
+    
   $this->load->view('toplist_b1',$data);
   }
 		/*$ret = $this->session->userdata('loginfrag');
